@@ -11,6 +11,9 @@ Built for the **Firebase #BuildHybridAI 2026** hackathon with **Firebase AI Logi
 inference**: `ONLY_ON_DEVICE` (Gemini Nano via Chrome's Prompt API) for the privacy work and
 `ONLY_IN_CLOUD` (Gemini 3.5 Flash Lite) for the analysis.
 
+**Live demo:** <https://localshield-hybrid-ai.web.app> — Firebase project `localshield-hybrid-ai`,
+Hosting + AI Logic (Gemini Developer API) + App Check (reCAPTCHA Enterprise). No install, no sign-in.
+
 ---
 
 ## The problem in one paragraph
@@ -161,6 +164,21 @@ runs for real (regex redaction, leak guard, audit log), and the analysis comes f
 rule set, clearly labelled `SIMULATED` in the header and the audit log.
 
 ## Deploy
+
+### Firebase Hosting (this project's live deployment)
+
+```bash
+npm run build
+firebase deploy --only hosting --project localshield-hybrid-ai
+```
+
+`firebase.json` publishes `dist/` as a single-page app (`{"source": "**", "destination": "/index.html"}`)
+with immutable caching for hashed assets and `no-cache` for `index.html`. The site is
+`https://localshield-hybrid-ai.web.app`; `firebase use` reads the default project from `.firebaserc`.
+The build embeds the `VITE_FIREBASE_*` / `VITE_APPCHECK_SITE_KEY` values from `.env.local`, so deploy
+from a machine (or CI secret set) that holds them — the values themselves never enter git.
+
+### GitHub Pages (optional mirror)
 
 Two ready-made workflows live in `docs/workflows-reference/`:
 
