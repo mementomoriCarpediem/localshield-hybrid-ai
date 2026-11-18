@@ -162,10 +162,26 @@ rule set, clearly labelled `SIMULATED` in the header and the audit log.
 
 ## Deploy
 
-The repository ships with two workflows:
+Two ready-made workflows live in `docs/workflows-reference/`:
 
-* `.github/workflows/ci.yml` — typecheck + build on every push and PR.
-* `.github/workflows/deploy.yml` — builds and publishes to GitHub Pages on `main`.
+* `ci.yml` — typecheck + build on every push and PR.
+* `deploy.yml` — builds and publishes to GitHub Pages on `main`.
+
+They sit outside `.github/` only because the GitHub App token that published this repository is
+not allowed to push workflow files. Enable them in one of two ways:
+
+```bash
+# from a clone, with a token that has the `workflow` scope
+git clone https://github.com/mementomoriCarpediem/localshield-hybrid-ai.git
+cd localshield-hybrid-ai && mkdir -p .github/workflows
+cp docs/workflows-reference/*.yml .github/workflows/
+git add .github && git commit -m "ci: enable workflows" && git push
+```
+
+or, without a local clone, use the GitHub web editor: **Add file → Create new file**, name it
+`.github/workflows/deploy.yml`, and paste the contents of `docs/workflows-reference/deploy.yml`
+(same for `ci.yml`). Then set **Settings → Pages → Source** to **GitHub Actions** — that one
+setting is what lets `deploy.yml` publish `https://mementomoricarpediem.github.io/localshield-hybrid-ai/`.
 
 To let the hosted demo reach your project, add `VITE_FIREBASE_*` and `VITE_APPCHECK_SITE_KEY`
 as repository secrets (Settings → Secrets and variables → Actions), and add your Pages domain
